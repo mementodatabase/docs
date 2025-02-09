@@ -24,8 +24,6 @@ The Library object provides access to library entries and operations. It can be 
 | `title` | string | The title of the library (alias for name) |
 | `id` | string | The unique identifier of the library (Added in MDB 5.5) |
 
-## Methods
-
 ## create(values)
 
 Create a new entry in the library with specified field values.
