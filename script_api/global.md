@@ -2,6 +2,7 @@
 title: Global Functions
 parent: Memento JavaScript API
 nav_order: 1
+layout: default
 ---
 
 # Global Functions
