@@ -1,13 +1,10 @@
 ---
-title: Documentation
-nav_order: 1
+title: Home
 layout: home
+nav_order: 1
+permalink: /
 ---
 
 # Documentation
 
-Welcome to the documentation. You can explore the main sections below:
-
-## Sections
-
-- [Script API](script_api.md)
+Welcome to the documentation. 
