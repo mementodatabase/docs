@@ -6,40 +6,49 @@ layout: default
 ---
 
 # Global Functions
+{: .no_toc }
 
-### entry()
+## Table of contents
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
+## entry()
 
 Get the Entry object of the current event.
 {: .fs-5 }
 
 Returns a clone of the actual Entry object. If the entry is saved, the clone becomes the actual entry. If `cancel()` is called, the clone and any changes are discarded.
 
-**Note:** Not available during 'Creating an entry > Opening an Entry Edit card' event (use `entryDefault()` instead)
 {: .note }
+Not available during 'Creating an entry > Opening an Entry Edit card' event (use `entryDefault()` instead)
 
-**Returns**  
+#### Returns
+{: .no_toc } 
 Entry object - the current entry
 
 #### Example
-
+{: .no_toc }
 ```javascript
 // Get the current entry and update its status
 let currentEntry = entry();
 currentEntry.set("Status", "In Progress");
 ```
 
-### entryDefault()
+## entryDefault()
 
 Get default field values for a not-yet-created entry.
 {: .fs-5 }
 
 Only available during 'Creating an entry > Opening an Entry Edit card' event. Used to set default values for new entries.
 
-**Returns**  
+#### Returns
+{: .no_toc }
 DefaultEntry object - contains default values for the new entry
 
 #### Example
-
+{: .no_toc }
 ```javascript
 // Set default values for a new entry
 let defaults = entryDefault();
@@ -47,7 +56,7 @@ defaults.set("Status", "New");
 defaults.set("CreatedDate", new Date().toISOString());
 ```
 
-### buildDefaultEntry()
+## buildDefaultEntry()
 
 Customize default field values during entry creation or update events.
 {: .fs-5 }
@@ -55,6 +64,7 @@ Customize default field values during entry creation or update events.
 Available during 'Creating an entry' or 'Updating an entry' trigger events. Specifically designed for the 'Opening an Entry Edit card' phase.
 
 #### Properties
+{: .no_toc }
 
 | Property | Description |
 |:---------|:------------|
@@ -62,11 +72,12 @@ Available during 'Creating an entry' or 'Updating an entry' trigger events. Spec
 | `duplicated` | Indicates a duplicate of an existing entry |
 | `prefilled` | Indicates creation from a template |
 
-**Returns**  
+#### Returns
+{: .no_toc }
 DefaultEntry object - contains methods for setting default values
 
 #### Example
-
+{: .no_toc }
 ```javascript
 // Set different defaults based on creation method
 if (buildDefaultEntry().duplicated) {
@@ -78,13 +89,13 @@ if (buildDefaultEntry().duplicated) {
 }
 ```
 
-### exit()
+## exit()
 
 Stop script execution immediately.
 {: .fs-5 }
 
 #### Example
-
+{: .no_toc }
 ```javascript
 if (entry().field("Status") === "Locked") {
     // Stop execution if entry is locked
@@ -92,16 +103,17 @@ if (entry().field("Status") === "Locked") {
 }
 ```
 
-### lib()
+## lib()
 
 Get the Library object of the current event.
 {: .fs-5 }
 
-**Returns**  
+#### Returns
+{: .no_toc }
 Library object - the current library
 
 #### Example
-
+{: .no_toc }
 ```javascript
 // Get current library and create a new entry
 let currentLib = lib();
@@ -111,7 +123,7 @@ let newEntry = currentLib.create({
 });
 ```
 
-### libByName(name)
+## libByName(name)
 
 Find a library by its name.
 {: .fs-5 }
@@ -119,16 +131,18 @@ Find a library by its name.
 Requires appropriate security permissions to access the library. Returns null if library not found or permissions are insufficient.
 
 #### Parameters
+{: .no_toc }
 
 | Parameter | Type | Description |
 |:----------|:-----|:------------|
 | `name` | string | The name of the library to find |
 
-**Returns**  
+#### Returns
+{: .no_toc }
 Library object or null - the library with the specified name if found
 
 #### Example
-
+{: .no_toc }
 ```javascript
 // Access a related library and find entries
 let tasksLib = libByName("Tasks");
@@ -138,7 +152,7 @@ if (tasksLib) {
 }
 ```
 
-### libById(id)
+## libById(id)
 
 Find a library by its ID.
 {: .fs-5 }
@@ -146,16 +160,18 @@ Find a library by its ID.
 Requires appropriate security permissions to access the library. More reliable than libByName() as IDs don't change when libraries are renamed.
 
 #### Parameters
+{: .no_toc }
 
 | Parameter | Type | Description |
 |:----------|:-----|:------------|
 | `id` | string | The ID of the library to find |
 
-**Returns**  
+#### Returns
+{: .no_toc }
 Library object or null - the library with the specified ID if found
 
 #### Example
-
+{: .no_toc }
 ```javascript
 // Access a library using its ID
 let projectsLib = libById("lib_projects_001");
