@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Memento JavaScript API
+title: JavaScript API
 nav_order: 2
 has_children: true
 ---
@@ -22,18 +22,16 @@ Memento Database provides JavaScript capabilities for extending its functionalit
 
 ### entry()
 
-Returns the Entry object associated with the current event.
-{: .fs-6 .fw-300 }
+Get the Entry object of the current event.
+{: .fs-5 }
 
 Returns a clone of the actual Entry object. If the entry is saved, the clone becomes the actual entry. If `cancel()` is called, the clone and any changes are discarded.
 
 **Note:** Not available during 'Creating an entry > Opening an Entry Edit card' event (use `entryDefault()` instead)
 {: .note }
 
-#### Return value
-
-Returns an Entry object
-{: .label .label-green }
+**Returns**  
+Entry object - the current entry
 
 #### Example
 
@@ -45,15 +43,13 @@ currentEntry.set("Status", "In Progress");
 
 ### entryDefault()
 
-Returns an Entry object containing default field values for a not-yet-created entry.
-{: .fs-6 .fw-300 }
+Get default field values for a not-yet-created entry.
+{: .fs-5 }
 
 Only available during 'Creating an entry > Opening an Entry Edit card' event. Used to set default values for new entries.
 
-#### Return value
-
-Returns a DefaultEntry object
-{: .label .label-green }
+**Returns**  
+DefaultEntry object - contains default values for the new entry
 
 #### Example
 
@@ -66,8 +62,8 @@ defaults.set("CreatedDate", new Date().toISOString());
 
 ### buildDefaultEntry()
 
-Facilitates the customization of default field values during entry creation or update events.
-{: .fs-6 .fw-300 }
+Customize default field values during entry creation or update events.
+{: .fs-5 }
 
 Available during 'Creating an entry' or 'Updating an entry' trigger events. Specifically designed for the 'Opening an Entry Edit card' phase.
 
@@ -79,10 +75,8 @@ Available during 'Creating an entry' or 'Updating an entry' trigger events. Spec
 | `duplicated` | Indicates a duplicate of an existing entry |
 | `prefilled` | Indicates creation from a template |
 
-#### Return value
-
-Returns a DefaultEntry object
-{: .label .label-green }
+**Returns**  
+DefaultEntry object - contains methods for setting default values
 
 #### Example
 
@@ -99,8 +93,8 @@ if (buildDefaultEntry().duplicated) {
 
 ### exit()
 
-Stops script execution immediately.
-{: .fs-6 .fw-300 }
+Stop script execution immediately.
+{: .fs-5 }
 
 #### Example
 
@@ -113,13 +107,11 @@ if (entry().field("Status") === "Locked") {
 
 ### lib()
 
-Returns the Library object associated with the current event.
-{: .fs-6 .fw-300 }
+Get the Library object of the current event.
+{: .fs-5 }
 
-#### Return value
-
-Returns a Library object
-{: .label .label-green }
+**Returns**  
+Library object - the current library
 
 #### Example
 
@@ -134,8 +126,8 @@ let newEntry = currentLib.create({
 
 ### libByName(name)
 
-Finds and returns a library by its name.
-{: .fs-6 .fw-300 }
+Find a library by its name.
+{: .fs-5 }
 
 Requires appropriate security permissions to access the library. Returns null if library not found or permissions are insufficient.
 
@@ -145,10 +137,8 @@ Requires appropriate security permissions to access the library. Returns null if
 |:----------|:-----|:------------|
 | `name` | string | The name of the library to find |
 
-#### Return value
-
-Returns a Library object or null
-{: .label .label-green }
+**Returns**  
+Library object or null - the library with the specified name if found
 
 #### Example
 
@@ -163,8 +153,8 @@ if (tasksLib) {
 
 ### libById(id)
 
-Finds and returns a library by its ID.
-{: .fs-6 .fw-300 }
+Find a library by its ID.
+{: .fs-5 }
 
 Added in MDB 5.5. Requires appropriate security permissions to access the library. More reliable than libByName() as IDs don't change when libraries are renamed.
 
@@ -174,10 +164,8 @@ Added in MDB 5.5. Requires appropriate security permissions to access the librar
 |:----------|:-----|:------------|
 | `id` | string | The ID of the library to find |
 
-#### Return value
-
-Returns a Library object or null
-{: .label .label-green }
+**Returns**  
+Library object or null - the library with the specified ID if found
 
 #### Example
 
@@ -193,7 +181,6 @@ if (projectsLib) {
 ## Library Object
 
 The Library object provides access to library entries and operations. It can be obtained through `lib()`, `libByName()`, or `libById()`.
-{: .fs-6 .fw-300 }
 
 ### Properties
 
@@ -207,8 +194,8 @@ The Library object provides access to library entries and operations. It can be 
 
 #### create(values)
 
-Creates a new entry in the library with specified field values.
-{: .fs-6 .fw-300 }
+Create a new entry in the library with specified field values.
+{: .fs-5 }
 
 #### Parameters
 
@@ -216,10 +203,8 @@ Creates a new entry in the library with specified field values.
 |:----------|:-----|:------------|
 | `values` | object | Key-value pairs where keys are field names and values are field values |
 
-#### Return value
-
-Returns an Entry object
-{: .label .label-green }
+**Returns**  
+Entry object - the newly created entry
 
 #### Example
 
@@ -236,13 +221,11 @@ let newTask = taskLib.create({
 
 #### entries()
 
-Returns all entries in the library, sorted by creation time (newest first).
-{: .fs-6 .fw-300 }
+Get all entries in the library.
+{: .fs-5 }
 
-#### Return value
-
-Returns an array of Entry objects
-{: .label .label-green }
+**Returns**  
+Array of Entry objects - all entries sorted by creation time (newest first)
 
 #### Example
 
@@ -258,13 +241,11 @@ allEntries.forEach(entry => {
 
 #### lastEntry()
 
-Returns the most recently created entry in the library.
-{: .fs-6 .fw-300 }
+Get the most recently created entry.
+{: .fs-5 }
 
-#### Return value
-
-Returns an Entry object or null if library is empty
-{: .label .label-green }
+**Returns**  
+Entry object or null - the newest entry or null if library is empty
 
 #### Example
 
@@ -282,13 +263,11 @@ if (latest) {
 
 #### firstEntry()
 
-Returns the oldest entry in the library.
-{: .fs-6 .fw-300 }
+Get the oldest entry in the library.
+{: .fs-5 }
 
-#### Return value
-
-Returns an Entry object or null if library is empty
-{: .label .label-green }
+**Returns**  
+Entry object or null - the oldest entry or null if library is empty
 
 #### Example
 
