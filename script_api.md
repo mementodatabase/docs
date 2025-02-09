@@ -498,3 +498,303 @@ overdueTasks.forEach(task => {
     }
 });
 ```
+
+[Previous content remains the same...]
+
+## Entry Object
+
+The Entry object represents a single entry in a library and provides methods for accessing and modifying its field values.
+
+### Properties
+
+| Property | Type | Description |
+|:---------|:-----|:------------|
+| `author` | string | ID of the user who created the entry |
+| `creationTime` | string | Date and time when the entry was created |
+| `deleted` | boolean | True if the entry is in the Recycle Bin |
+| `description` | string | Entry description |
+| `favorites` | boolean | True if the entry is in Favorites |
+| `id` | string | Unique entry identifier |
+| `lastModifiedTime` | string | Date and time of last modification |
+| `name` | string | Entry name |
+| `title` | string | Entry name (alias for name) |
+
+### Methods
+
+#### field(name)
+
+Get the value of a specified field.
+{: .fs-5 }
+
+Returns the value of the specified field. The return type depends on the field type.
+
+#### Parameters
+
+| Parameter | Type | Description |
+|:----------|:-----|:------------|
+| `name` | string | Name of the field to retrieve |
+
+**Returns**  
+The field value in its appropriate type:
+- Text fields: string
+- Number fields: number
+- Date fields: string (ISO date format)
+- Time fields: string (HH:mm format)
+- Checkbox fields: boolean
+- Multiple-choice fields: array of strings
+- Link to Entry fields: array of Entry objects
+- Link to File fields: array of file path strings
+- Image fields: array of image objects
+
+#### Example
+
+```javascript
+// Get various field types
+let entry = lib().lastEntry();
+
+// Text field
+let title = entry.field("Title");
+console.log(`Title: ${title}`);
+
+// Number field
+let quantity = entry.field("Quantity");
+console.log(`Quantity: ${quantity}`);
+
+// Date field
+let dueDate = new Date(entry.field("DueDate"));
+console.log(`Due date: ${dueDate.toLocaleDateString()}`);
+
+// Multiple-choice field
+let categories = entry.field("Categories");
+categories.forEach(category => {
+    console.log(`Category: ${category}`);
+});
+
+// Link to Entry field
+let linkedTasks = entry.field("RelatedTasks");
+linkedTasks.forEach(task => {
+    console.log(`Related task: ${task.field("Title")}`);
+});
+```
+
+#### images(name)
+
+Get images associated with an image field.
+{: .fs-5 }
+
+Returns an array of image objects, each containing information about the image and methods to manipulate it.
+
+#### Parameters
+
+| Parameter | Type | Description |
+|:----------|:-----|:------------|
+| `name` | string | Name of the image field |
+
+**Returns**  
+Array of image objects, each containing:
+- `caption`: string - Get or set the image caption
+- `uri`: string - Get the image URI
+
+#### Example
+
+```javascript
+// Work with images in an entry
+let entry = lib().lastEntry();
+let photos = entry.images("Photos");
+
+// Process all images
+photos.forEach(photo => {
+    // Get image information
+    console.log(`Image URI: ${photo.uri}`);
+    console.log(`Caption: ${photo.caption}`);
+    
+    // Update caption if needed
+    if (!photo.caption) {
+        photo.caption = "Photo taken on " + new Date().toLocaleDateString();
+    }
+});
+```
+
+#### link(name, entry)
+
+Add a link to another entry in a Link to Entry field.
+{: .fs-5 }
+
+Creates a link to the specified entry in the named Link to Entry field.
+
+#### Parameters
+
+| Parameter | Type | Description |
+|:----------|:-----|:------------|
+| `name` | string | Name of the Link to Entry field |
+| `entry` | Entry | Entry to link to |
+
+#### Example
+
+```javascript
+// Link a task to a project
+let tasksLib = lib();
+let projectsLib = libByName("Projects");
+
+// Get the project and task
+let project = projectsLib.findByKey("Website Redesign");
+let task = tasksLib.lastEntry();
+
+if (project && task) {
+    // Create link from task to project
+    task.link("Project", project);
+    
+    // Update task metadata
+    task.set("ProjectStartDate", project.field("StartDate"));
+    task.set("Department", project.field("Department"));
+}
+```
+
+#### recalc()
+
+Recalculate all calculated fields in the entry.
+{: .fs-5 }
+
+Triggers a recalculation of all fields that contain formulas or calculated values.
+
+#### Example
+
+```javascript
+// Update quantities and recalculate totals
+let entry = lib().lastEntry();
+entry.set("Quantity", 5);
+entry.set("UnitPrice", 10.99);
+// Recalculate the Total field that might depend on Quantity and UnitPrice
+entry.recalc();
+```
+
+#### set(name, value)
+
+Set the value of a specified field.
+{: .fs-5 }
+
+Updates the value of the specified field. The value type should match the field type.
+
+#### Parameters
+
+| Parameter | Type | Description |
+|:----------|:-----|:------------|
+| `name` | string | Name of the field to update |
+| `value` | any | Value to set (type must match field type) |
+
+#### Example
+
+```javascript
+// Examples of setting different field types
+let entry = lib().lastEntry();
+
+// Text field
+entry.set("Title", "Updated Task Title");
+
+// Number field
+entry.set("Quantity", 42);
+
+// Date field
+entry.set("DueDate", new Date().toISOString());
+
+// Multiple-choice field
+entry.set("Categories", ["Work", "Important", "Project"]);
+
+// Checkbox field
+entry.set("Completed", true);
+
+// Link to Entry field with multiple values
+let relatedEntries = [entry1, entry2].map(e => e.name).join(",");
+entry.set("RelatedItems", relatedEntries);
+```
+
+#### show()
+
+Display the entry in the user interface.
+{: .fs-5 }
+
+Opens the entry view in Memento's user interface.
+
+#### Example
+
+```javascript
+// Create entry and show it
+let entry = lib().create({
+    "Title": "New Task",
+    "Priority": "High"
+});
+entry.show(); // Display the new entry
+```
+
+#### trash()
+
+Move the entry to the Recycle Bin.
+{: .fs-5 }
+
+Marks the entry as deleted and moves it to the Recycle Bin.
+
+#### Example
+
+```javascript
+// Move completed old entries to trash
+let oldEntries = lib().find("Status: Completed");
+let monthAgo = new Date();
+monthAgo.setMonth(monthAgo.getMonth() - 1);
+
+oldEntries.forEach(entry => {
+    let completionDate = new Date(entry.field("CompletionDate"));
+    if (completionDate < monthAgo) {
+        entry.trash();
+    }
+});
+```
+
+#### untrash()
+
+Restore the entry from the Recycle Bin.
+{: .fs-5 }
+
+Removes the deleted mark from the entry and restores it from the Recycle Bin.
+
+#### Example
+
+```javascript
+// Restore accidentally deleted entries
+let deletedEntries = lib().find("Status: Active");
+deletedEntries.forEach(entry => {
+    if (entry.deleted) {
+        entry.untrash();
+        entry.set("RestoredDate", new Date().toISOString());
+        entry.set("RestoredBy", "Script");
+    }
+});
+```
+
+#### unlink(name, entry)
+
+Remove a link to another entry from a Link to Entry field.
+{: .fs-5 }
+
+Removes the specified entry link from the named Link to Entry field.
+
+#### Parameters
+
+| Parameter | Type | Description |
+|:----------|:-----|:------------|
+| `name` | string | Name of the Link to Entry field |
+| `entry` | Entry | Entry to unlink |
+
+#### Example
+
+```javascript
+// Remove completed tasks from project links
+let project = lib().lastEntry();
+let linkedTasks = project.field("Tasks");
+
+linkedTasks.forEach(task => {
+    if (task.field("Status") === "Completed") {
+        project.unlink("Tasks", task);
+        task.set("ProjectArchiveDate", new Date().toISOString());
+    }
+});
+```
