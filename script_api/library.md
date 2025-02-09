@@ -17,7 +17,6 @@ layout: default
 The Library object provides access to library entries and operations. It can be obtained through `lib()`, `libByName()`, or `libById()`.
 
 ## Properties
-{: .no_toc }
 
 | Property | Type | Description |
 |:---------|:-----|:------------|
