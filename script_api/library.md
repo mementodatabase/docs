@@ -11,7 +11,7 @@ layout: default
 ## Table of contents
 {: .no_toc .text-delta }
 
-1. TOC
+- TOC
 {:toc}
 
 The Library object provides access to library entries and operations. It can be obtained through `lib()`, `libByName()`, or `libById()`.
@@ -25,8 +25,8 @@ The Library object provides access to library entries and operations. It can be 
 | `id` | string | The unique identifier of the library (Added in MDB 5.5) |
 
 ## Methods
-{: .no_toc }
-### create(values)
+
+## create(values)
 
 Create a new entry in the library with specified field values.
 {: .fs-5 }
@@ -56,7 +56,7 @@ let newTask = taskLib.create({
 });
 ```
 
-### entries()
+## entries()
 
 Get all entries in the library.
 {: .fs-5 }
@@ -77,7 +77,7 @@ allEntries.forEach(entry => {
 });
 ```
 
-### lastEntry()
+## lastEntry()
 
 Get the most recently created entry.
 {: .fs-5 }
@@ -100,7 +100,7 @@ if (latest) {
 }
 ```
 
-### firstEntry()
+## firstEntry()
 
 Get the oldest entry in the library.
 {: .fs-5 }
@@ -119,7 +119,7 @@ if (oldest && new Date(oldest.creationTime) < new Date('2023-01-01')) {
 }
 ```
 
-### fields()
+## fields()
 
 Get field names defined in the library.
 {: .fs-5 }
@@ -140,7 +140,7 @@ fieldNames.forEach(fieldName => {
 });
 ```
 
-### find(query)
+## find(query)
 
 Search for entries matching the given query.
 {: .fs-5 }
@@ -173,7 +173,7 @@ highPriorityTasks.forEach(task => {
 });
 ```
 
-### findById(id)
+## findById(id)
 
 Find an entry by its unique ID.
 {: .fs-5 }
@@ -203,7 +203,7 @@ if (entry) {
 }
 ```
 
-### findByKey(name)
+## findByKey(name)
 
 Find an entry by its name field value.
 {: .fs-5 }
@@ -236,7 +236,7 @@ if (project) {
 }
 ```
 
-### linksTo(entry)
+## linksTo(entry)
 
 Find entries that contain links to the specified entry.
 {: .fs-5 }
@@ -273,7 +273,7 @@ if (project) {
 }
 ```
 
-### show()
+## show()
 
 Display the library in the user interface.
 {: .fs-5 }
