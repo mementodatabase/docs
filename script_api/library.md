@@ -18,6 +18,7 @@ The Library object provides access to library entries and operations. It can be 
 
 ## Properties
 {: .no_toc }
+
 | Property | Type | Description |
 |:---------|:-----|:------------|
 | `name` | string | The name of the library |
@@ -149,6 +150,7 @@ Performs a search similar to the Memento user interface search. Returns entries 
 
 #### Parameters
 {: .no_toc }
+
 | Parameter | Type | Description |
 |:----------|:-----|:------------|
 | `query` | string | The search query string |
@@ -181,6 +183,7 @@ Searches for an entry using its unique identifier. This is the most reliable way
 
 #### Parameters
 {: .no_toc }
+
 | Parameter | Type | Description |
 |:----------|:-----|:------------|
 | `id` | string | The unique identifier of the entry |
@@ -210,6 +213,7 @@ Searches for an entry using the entry name. The library must be configured to us
 
 #### Parameters
 {: .no_toc }
+
 | Parameter | Type | Description |
 |:----------|:-----|:------------|
 | `name` | string | The value of the Entry name field |
@@ -242,6 +246,7 @@ Searches for entries that have a link to the specified entry in any of their Lin
 
 #### Parameters
 {: .no_toc }
+
 | Parameter | Type | Description |
 |:----------|:-----|:------------|
 | `entry` | Entry | The entry to search for links to |
