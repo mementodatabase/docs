@@ -1,11 +1,11 @@
 ---
-title: Library Object
+title: Libraries
 parent: Memento JavaScript API
 nav_order: 2
 layout: default
 ---
 
-# Library Object
+# Libraries
 {: .no_toc }
 
 ## Table of contents
@@ -13,6 +13,88 @@ layout: default
 
 - TOC
 {:toc}
+
+# Global Functions
+
+## lib()
+
+Get the Library object of the current event.
+{: .fs-5 }
+
+#### Returns
+{: .no_toc }
+Library object - the current library
+
+#### Example
+{: .no_toc }
+```javascript
+// Get current library and create a new entry
+let currentLib = lib();
+let newEntry = currentLib.create({
+    "Title": "New Task",
+    "Status": "Pending"
+});
+```
+
+## libByName(name)
+
+Find a library by its name.
+{: .fs-5 }
+
+Requires appropriate security permissions to access the library. Returns null if library not found or permissions are insufficient.
+
+#### Parameters
+{: .no_toc }
+
+| Parameter | Type | Description |
+|:----------|:-----|:------------|
+| `name` | string | The name of the library to find |
+
+#### Returns
+{: .no_toc }
+Library object or null - the library with the specified name if found
+
+#### Example
+{: .no_toc }
+```javascript
+// Access a related library and find entries
+let tasksLib = libByName("Tasks");
+if (tasksLib) {
+    let pendingTasks = tasksLib.find("Status: Pending");
+    console.log("Pending tasks:", pendingTasks.length);
+}
+```
+
+## libById(id)
+
+Find a library by its ID.
+{: .fs-5 }
+
+Requires appropriate security permissions to access the library. More reliable than libByName() as IDs don't change when libraries are renamed.
+
+#### Parameters
+{: .no_toc }
+
+| Parameter | Type | Description |
+|:----------|:-----|:------------|
+| `id` | string | The ID of the library to find |
+
+#### Returns
+{: .no_toc }
+Library object or null - the library with the specified ID if found
+
+#### Example
+{: .no_toc }
+```javascript
+// Access a library using its ID
+let projectsLib = libById("lib_projects_001");
+if (projectsLib) {
+    let activeProjects = projectsLib.find("Status: Active");
+    console.log("Active projects:", activeProjects.length);
+}
+```
+
+# Library Object
 
 The Library object provides access to library entries and operations. It can be obtained through `lib()`, `libByName()`, or `libById()`.
 
