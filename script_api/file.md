@@ -19,18 +19,25 @@ The File API enables reading and writing files on the device's internal memory o
 {: .note }
 Scripts require read/write file permissions. In the Android app, you must select a folder that your script will have access to through the script permission dialog.
 
+
+# Global functions
+
 ## file(name)
 Creates or opens a file for read/write operations.
 
 #### Parameters
+{: .no_toc }
+
 | Parameter | Type | Description |
 |-----------|------|-------------|
 | name | String | File name in the chosen accessible folder. For Desktop app, specify full file path. |
 
 #### Returns
+{: .no_toc }
 Returns a `File` object for the specified file.
 
 #### Example
+{: .no_toc }
 ```javascript
 let f = file("data.txt");
 f.writeLine("Hello World");
@@ -43,6 +50,8 @@ log("File created successfully");
 Represents a file on the device's storage system and provides methods for reading and writing operations.
 
 ## Properties
+{: .no_toc }
+
 | Property | Type | Description |
 |----------|------|-------------|
 | exists | Boolean | `true` if the file exists, `false` otherwise |
@@ -193,9 +202,9 @@ f.close();
 log("Content appended successfully");
 ```
 
-## Complete Examples
+# Examples
 
-### Example 1: Writing and Reading a File
+## Writing and Reading a File
 {: .no_toc }
 ```javascript
 let f = file("myfile.txt");
@@ -210,7 +219,7 @@ log("File contents: " + lines.join(", "));
 f.close();
 ```
 
-### Example 2: Saving Entry Data as XML
+## Saving Entry Data as XML
 {: .no_toc }
 ```javascript
 let xml = '<record id="' + entry().field("id") + '">' +
