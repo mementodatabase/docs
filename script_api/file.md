@@ -11,7 +11,7 @@ layout: default
 ## Table of contents
 {: .no_toc .text-delta }
 
-1. TOC
+- TOC
 {:toc}
 
 The File API enables reading and writing files on the device's internal memory or SD card. All file operations are performed through the `File` object, which is obtained using the global `file()` function.
