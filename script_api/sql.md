@@ -69,9 +69,9 @@ Array of Entry objects representing the matching database records.
 
 {: .note }
 The SQL query must include the `id` column
-
+{: .note }
 Only fields specified in the SELECT statement will be included in the entries
-
+{: .note }
 For better performance, specify needed fields instead of using SELECT *
 
 #### Example
