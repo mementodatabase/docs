@@ -31,6 +31,7 @@ Global function that returns an Http object for making HTTP requests.
 A new Http object instance for making HTTP requests
 
 #### Example
+{: .no_toc } 
 ```javascript
 var httpClient = http();
 log("Created new HTTP client");
