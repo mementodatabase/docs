@@ -68,9 +68,11 @@ Returns query results as a list of Memento Database entry objects.
 Array of Entry objects representing the matching database records.
 
 {: .note }
-- The SQL query must include the `id` column
-- Only fields specified in the SELECT statement will be included in the entries
-- For better performance, specify needed fields instead of using SELECT *
+The SQL query must include the `id` column
+
+Only fields specified in the SELECT statement will be included in the entries
+
+For better performance, specify needed fields instead of using SELECT *
 
 #### Example
 {: .no_toc } 
