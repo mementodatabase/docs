@@ -102,7 +102,7 @@ i.data("tel:+1234567890");
 i.send();
 ```
 
-## System Object
+# System Object
 
 ### Properties
 {: .no_toc } 
@@ -112,7 +112,7 @@ i.send();
 | os | String | Operating system name |
 | username | String | Current user's username |
 
-## Intent Object
+# Intent Object
 Represents an Android Intent for inter-application communication.
 
 ## data(uri)
