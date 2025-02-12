@@ -1,11 +1,11 @@
 ---
-title: SQL Query Interface
+title: SQL
 parent: Memento JavaScript API
 nav_order: 5
 layout: default
 ---
 
-# SQL Query Interface
+# SQL
 {: .no_toc } 
 
 ## Table of contents
