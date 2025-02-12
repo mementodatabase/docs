@@ -371,7 +371,7 @@ let newEntry = lib().create({
 lib().show(); // Display the library with the new entry
 ```
 
-## Advanced Library Usage Examples
+# Examples
 
 ### Working with Multiple Libraries
 {: .no_toc }
