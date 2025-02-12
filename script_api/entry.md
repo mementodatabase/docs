@@ -1,18 +1,98 @@
 ---
-title: Entry Object
+title: Entries
 parent: Memento JavaScript API
 nav_order: 3
 layout: default
 ---
 
-# Entry Object
-{: .no_toc }
+# Entries
 
 ## Table of contents
 {: .no_toc .text-delta }
 
 - TOC
 {:toc}
+
+# Global Functions
+
+## entry()
+
+Get the Entry object of the current event.
+{: .fs-5 }
+
+Returns a clone of the actual Entry object. If the entry is saved, the clone becomes the actual entry. If `cancel()` is called, the clone and any changes are discarded.
+
+{: .note }
+Not available during 'Creating an entry > Opening an Entry Edit card' event (use `entryDefault()` instead)
+
+#### Returns
+{: .no_toc } 
+Entry object - the current entry
+
+#### Example
+{: .no_toc }
+```javascript
+// Get the current entry and update its status
+let currentEntry = entry();
+currentEntry.set("Status", "In Progress");
+```
+
+## entryDefault()
+
+Get default field values for a not-yet-created entry.
+{: .fs-5 }
+
+Only available during 'Creating an entry > Opening an Entry Edit card' event. Used to set default values for new entries.
+
+#### Returns
+{: .no_toc }
+DefaultEntry object - contains default values for the new entry
+
+#### Example
+{: .no_toc }
+```javascript
+// Set default values for a new entry
+let defaults = entryDefault();
+defaults.set("Status", "New");
+defaults.set("CreatedDate", new Date().toISOString());
+```
+
+## buildDefaultEntry()
+
+Customize default field values during entry creation or update events.
+{: .fs-5 }
+
+Available during 'Creating an entry' or 'Updating an entry' trigger events. Specifically designed for the 'Opening an Entry Edit card' phase.
+
+#### Properties
+{: .no_toc }
+
+| Property | Description |
+|:---------|:------------|
+| `created` | Indicates a new empty entry |
+| `duplicated` | Indicates a duplicate of an existing entry |
+| `prefilled` | Indicates creation from a template |
+
+#### Returns
+{: .no_toc }
+DefaultEntry object - contains methods for setting default values
+
+#### Example
+{: .no_toc }
+```javascript
+// Set different defaults based on creation method
+if (buildDefaultEntry().duplicated) {
+    buildDefaultEntry().set("Status", "Duplicate");
+    buildDefaultEntry().set("DuplicatedDate", new Date().toISOString());
+} else if (buildDefaultEntry().created) {
+    buildDefaultEntry().set("Status", "New");
+    buildDefaultEntry().set("Priority", "Medium");
+}
+```
+
+# Entry Object
+
+The Entry object represents a single entry in a library and provides methods for accessing and modifying its field values.
 
 ## Properties
 
