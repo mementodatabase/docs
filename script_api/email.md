@@ -16,7 +16,7 @@ layout: default
 
 The Email API provides functionality for sending email messages through SMTP servers in Memento Database scripts.
 
-## Global Functions
+# Global Functions
 
 ## email()
 Returns the system Email object that provides email-related functionality.
