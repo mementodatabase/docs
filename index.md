@@ -5,13 +5,6 @@ nav_order: 0
 permalink: /
 ---
 
-# Documentation
-{: .no_toc } 
-
-{:toc}
-
-Welcome to the Memento Database Scripting Documentation
-
 # Scripting Overview
 
 Memento Database provides powerful scripting capabilities that allow you to extend functionality, automate tasks, and create dynamic user experiences using JavaScript. Scripts enable you to go beyond the standard database features and implement custom logic tailored to your specific needs.
@@ -28,9 +21,10 @@ Scripts in Memento Database are [JavaScript](https://developer.mozilla.org/en-US
 
 ## Where Scripts Are Used
 
-- **[Triggers](scripts/triggers.md)**: Execute automatically on database events (record creation, updates, deletion, field changes)
+- **[Triggers]({% link scripts/triggers.md})**: Execute automatically on database events (record creation, updates, deletion, field changes)
 - **Actions and Buttons**: Run when users click buttons or menu items in the interface
 - **Data Sources**: Provide dynamic data for auto-completion fields and dropdowns
 - **Widgets**: Program the appearance and behavior of widgets based on library data
 
-- 
+For detailed information on accessing and manipulating library data within scripts, see the [Memento JavaScript API](javascript-api.md) documentation, which provides comprehensive reference for all available methods and objects for working with records, fields, and library operations.
+
