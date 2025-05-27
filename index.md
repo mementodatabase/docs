@@ -21,7 +21,7 @@ Scripts in Memento Database are [JavaScript](https://developer.mozilla.org/en-US
 
 ## Where Scripts Are Used
 
-- **[Triggers]({% link scripts/triggers.md})**: Execute automatically on database events (record creation, updates, deletion, field changes)
+- **[Triggers]({% link scripts/triggers.md %})**: Execute automatically on database events (record creation, updates, deletion, field changes)
 - **Actions and Buttons**: Run when users click buttons or menu items in the interface
 - **Data Sources**: Provide dynamic data for auto-completion fields and dropdowns
 - **Widgets**: Program the appearance and behavior of widgets based on library data
