@@ -2,12 +2,9 @@ title: Memento Database Scripting
 description: Memento Database Scripting is a guide to scripting and calculated fields in Memento Database. Find tutorials, code examples, and tips for automating and enhancing your data management.
 theme: just-the-docs
 
-url: https://mementodatabase.github.io/docs
+url: https://scripts.mementodatabase.com
 
 permalink: pretty
-
-aux_links:
-  Template Repository: https://github.com/just-the-docs/just-the-docs-template
 
 heading_anchors: true
 
@@ -21,7 +18,7 @@ last_edit_time_format: "%b %e %Y at %I:%M %p" # uses ruby's time format: https:/
 back_to_top: true
 back_to_top_text: "Back to top"
 
-footer_content: 'Copyright &copy; 2024 MementoDB Inc.'
+footer_content: 'Copyright &copy; 2025 MementoDB Inc.'
 
 callouts_level: quiet # or loud
 callouts:
