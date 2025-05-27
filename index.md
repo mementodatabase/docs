@@ -25,7 +25,7 @@ Scripts in Memento Database are [JavaScript](https://developer.mozilla.org/en-US
 - **[Actions and Buttons]({% scripts/actions.md %})**: Run when users click buttons or menu items in the interface
 - **[Data Sources]({% scripts/data_source.md %})**: Provide dynamic data for auto-completion fields and dropdowns
 - **[Widgets]({% scripts/widgets.md %})**: Program the appearance and behavior of widgets based on library data
-- **[JavaScript Field]({% scripts/javascript_field.md %})**: Use scripts for complex calculations within entry fields  
+- **[JavaScript Field]({% scripts/widgets.md %})**: Use scripts for complex calculations within entry fields  
 
 For detailed information on accessing and manipulating library data within scripts, see the [Memento JavaScript API]({% script_api/index.md %}) documentation, which provides comprehensive reference for all available methods and objects for working with entries, fields, and library operations.
 
