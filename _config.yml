@@ -1,8 +1,41 @@
-title: Just the Docs Template
-description: A starter template for a Jeykll site using the Just the Docs theme!
+title: Memento Database Scripting
+description: Memento Database Scripting is a guide to scripting and calculated fields in Memento Database. Find tutorials, code examples, and tips for automating and enhancing your data management.
 theme: just-the-docs
 
-url: https://just-the-docs.github.io
+url: https://mementodatabase.github.io/docs
+
+permalink: pretty
 
 aux_links:
   Template Repository: https://github.com/just-the-docs/just-the-docs-template
+
+heading_anchors: true
+
+nav_enabled: true
+
+# Footer last edited timestamp
+last_edit_timestamp: true # show or hide edit time - page must have `last_modified_date` defined in the frontmatter
+last_edit_time_format: "%b %e %Y at %I:%M %p" # uses ruby's time format: https://ruby-doc.org/stdlib-2.7.0/libdoc/time/rdoc/Time.html
+
+# Back to top link
+back_to_top: true
+back_to_top_text: "Back to top"
+
+footer_content: 'Copyright &copy; 2024 MementoDB Inc.'
+
+callouts_level: quiet # or loud
+callouts:
+  highlight:
+    color: yellow
+  important:
+    title: Important
+    color: blue
+  new:
+    title: New
+    color: green
+  note:
+    title: Note
+    color: purple
+  warning:
+    title: Warning
+    color: red
