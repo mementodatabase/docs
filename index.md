@@ -19,5 +19,6 @@ Memento Database provides powerful scripting capabilities that allow you to exte
 
 For detailed information on accessing and manipulating library data within scripts, see the **[Memento JavaScript API]({% link script_api/index.md %})** documentation, which provides comprehensive reference for all available methods and objects for working with entries, fields, and library operations.
 
-{: .note } Scripts in JavaScript Field run in a limited execution context and do not support methods from the Memento JavaScript API.
+{: .note } 
+Scripts in JavaScript Field run in a limited execution context and do not support methods from the Memento JavaScript API.
 
