@@ -19,7 +19,8 @@ layout: default
 ## cancel()
 Stops the current system operation that triggered the event. Useful for preventing operations during validation phases.
 
-{: .note } This method works only in triggers or event scripts executed before saving or before creating an entry.
+{: .note } 
+This method works only in triggers or event scripts executed before saving or before creating an entry.
 
 #### Returns
 {: .no_toc } 
