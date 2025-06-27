@@ -16,12 +16,6 @@ layout: default
 
 The JavaScript field is similar to a calculated field, but uses JavaScript expressions for calculations. Unlike other scripts in Memento Database, this field executes only in the context of an entry (has access to entry fields), not to any data. You can only read field values - modification of field values is not supported.
 
-The value of the field will be the result of execution of the script defined in the field and executed in the entry context.
-
-## JavaScript Version and Limitations
-
-**JavaScript 1.7** is used for scripts. The current version supports only core methods of the language.
-
 A script may consist of multiple operations, but only the result of the last operation will be entered into the field. For example:
 
 ```javascript
