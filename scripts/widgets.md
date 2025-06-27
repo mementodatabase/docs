@@ -67,18 +67,17 @@ result;
 var entries = lib().entries();
 var categories = {};
 for (var i = 0; i < entries.length; i++) {
-    var category = entries[i].field("Category");
+    var category = entries[i].field("Role");
     if (category in categories) {
         categories[category]++;
     } else {
         categories[category] = 1;
     }
 }
-var result = "<ul>";
+var result = "";
 for (var category in categories) {
-    result += "<li>" + category + " - " + categories[category] + "</li>";
+    result += "* " + category + " - " + categories[category] + "\n";
 }
-result += "</ul>";
 result;
 ```
 
