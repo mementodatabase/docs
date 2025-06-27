@@ -15,7 +15,7 @@ Memento Database provides powerful scripting capabilities that allow you to exte
 - **[Actions and Buttons]({% link scripts/actions.md %})**: Run when users click buttons or menu items in the interface
 - **[Data Sources]({% link scripts/data_source.md %})**: Provide dynamic data for auto-completion fields and dropdowns
 - **[Widgets]({% link scripts/widgets.md %})**: Program the appearance and behavior of widgets based on library data
-- **[JavaScript Field]({% link scripts/widgets.md %})**: Use scripts for complex calculations within entry fields  
+- **[JavaScript Field]({% link scripts/field.md %})**: Use scripts for complex calculations within entry fields  
 
 For detailed information on accessing and manipulating library data within scripts, see the **[Memento JavaScript API]({% link script_api/index.md %})** documentation, which provides comprehensive reference for all available methods and objects for working with entries, fields, and library operations.
 
