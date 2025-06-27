@@ -55,7 +55,7 @@ DefaultEntry object - contains default values for the new entry
 // Set default values for a new entry
 let defaults = entryDefault();
 defaults.set("Status", "New");
-defaults.set("CreatedDate", new Date().toISOString());
+defaults.set("CreatedDate", new Date().getTime());
 ```
 
 ## buildDefaultEntry()
@@ -84,7 +84,7 @@ DefaultEntry object - contains methods for setting default values
 // Set different defaults based on creation method
 if (buildDefaultEntry().duplicated) {
     buildDefaultEntry().set("Status", "Duplicate");
-    buildDefaultEntry().set("DuplicatedDate", new Date().toISOString());
+    buildDefaultEntry().set("DuplicatedDate", new Date().getTime());
 } else if (buildDefaultEntry().created) {
     buildDefaultEntry().set("Status", "New");
     buildDefaultEntry().set("Priority", "Medium");
@@ -150,7 +150,7 @@ let quantity = entry.field("Quantity");
 message(`Quantity: ${quantity}`);
 
 // Date field
-let dueDate = new Date(entry.field("DueDate"));
+let dueDate = entry.field("DueDate");
 message(`Due date: ${dueDate.toLocaleDateString()}`);
 
 // Multiple-choice field
@@ -280,7 +280,7 @@ entry.set("Title", "Updated Task Title");
 entry.set("Quantity", 42);
 
 // Date field
-entry.set("DueDate", new Date().toISOString());
+entry.set("DueDate", new Date().getTime());
 
 // Multiple-choice field
 entry.set("Categories", ["Work", "Important", "Project"]);
@@ -289,8 +289,7 @@ entry.set("Categories", ["Work", "Important", "Project"]);
 entry.set("Completed", true);
 
 // Link to Entry field with multiple values
-let relatedEntries = [entry1, entry2].map(e => e.name).join(",");
-entry.set("RelatedItems", relatedEntries);
+entry.set("RelatedItems",  [entry1, entry2]);
 ```
 
 ## show()
@@ -323,8 +322,8 @@ let monthAgo = new Date();
 monthAgo.setMonth(monthAgo.getMonth() - 1);
 
 oldEntries.forEach(entry => {
-    let completionDate = new Date(entry.field("CompletionDate"));
-    if (completionDate < monthAgo) {
+    let completionDate = entry.field("CompletionDate");
+    if (completionDate.getTime() < monthAgo.getTime()) {
         entry.trash();
     }
 });
@@ -339,11 +338,10 @@ Restore the entry from the Recycle Bin.
 
 ```javascript
 // Restore accidentally deleted entries
-let deletedEntries = lib().find("Status: Active");
-deletedEntries.forEach(entry => {
+lib().entries().forEach(entry => {
     if (entry.deleted) {
         entry.untrash();
-        entry.set("RestoredDate", new Date().toISOString());
+        entry.set("RestoredDate", new Date().getTime());
         entry.set("RestoredBy", "Script");
     }
 });
@@ -372,7 +370,7 @@ let linkedTasks = project.field("Tasks");
 linkedTasks.forEach(task => {
     if (task.field("Status") === "Completed") {
         project.unlink("Tasks", task);
-        task.set("ProjectArchiveDate", new Date().toISOString());
+        task.set("ProjectArchiveDate", new Date().getTime());
     }
 });
 ```
