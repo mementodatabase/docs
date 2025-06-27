@@ -392,28 +392,28 @@ let task1 = tasksLib.create({
 task1.set("Project" , newProject)
 ```
 
-### Complex Search and Update Operations
+### Search and Update Operations
 {: .no_toc }
 ```javascript
 // Find and update multiple entries based on complex criteria
-let overdueTasks = lib().find("Status: In Progress");
+// Get today's date
 let today = new Date();
 
-overdueTasks.forEach(task => {
-    let dueDate = new Date(task.field("DueDate"));
-    if (dueDate < today) {
-        // Task is overdue
-        task.set("Status", "Overdue");
+// Get all tasks
+let allTasks = lib().entries();
+let resourcesLib = libByName("Resources");
+
+// Iterate and filter only "In Progress" tasks
+allTasks.forEach(task => {
+    if (task.field("Status") === "In Progress") {
+        let dueDate = task.field("DueDate");
         
-        // Get the assigned resource
-        let assignee = task.field("AssignedTo");
-        if (assignee) {
-            let resourcesLib = libByName("Resources");
-            let resource = resourcesLib.findByKey(assignee);
-            if (resource) {
-                resource.set("OverdueTasks", resource.field("OverdueTasks") + 1);
-            }
+        // Check if task is overdue
+        if (dueDate.getTime() < today.getTime()) {
+            // Mark task as overdue
+            task.set("Status", "Overdue");
         }
     }
 });
+
 ```
