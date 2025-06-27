@@ -210,17 +210,27 @@ Permissions must be set separately on each device
 {: .no_toc } 
 ```javascript
 // Set default values when creating a new entry
+
+// Get a reference to the newly created entry (before it's saved)
 var newEntry = defaultEntry();
+
+// Set the "Status" field to "New"
 newEntry.set("Status", "New");
+
+// Set the "CreationDate" field to the current date and time
 newEntry.set("CreationDate", new Date());
+
 ```
 
 ### Data Validation
 {: .no_toc } 
 ```javascript
 // Before saving entry
+// Check if the "Price" field is negative
 if (entry().field("Price") < 0) {
+    // Show an error message to the user
     message("Price cannot be negative");
+    // Cancel the save operation to prevent invalid data
     cancel();
 }
 ```
@@ -229,20 +239,32 @@ if (entry().field("Price") < 0) {
 {: .no_toc } 
 ```javascript
 // Before saving entry
+// Get the value of the "Price" field from the current entry
 var price = entry().field("Price");
+
+// Calculate 20% tax based on the price
 var tax = price * 0.2;
+
+// Set the calculated tax value into the "Tax" field of the entry
 entry().set("Tax", tax);
+
 ```
 
 ### Creating Related Entries
 {: .no_toc } 
 ```javascript
 // After saving entry
-var relatedLib = libByName("Related Library");
-relatedLib.create()
-    .set("ParentID", entry().id())
-    .set("Status", "New")
-    .save();
+// This script runs after a new employee entry is saved.
+// It automatically creates a new task in the "Project Tasks" library.
+// The task is titled "Complete Product Training".
+// The employee (current entry) is set as the value of the "Assignee" linked field.
+var projectTasks = libByName("Project Tasks") // Get the "Project Tasks" library
+
+var task = projectTasks.create({              // Create a new task entry
+  "Name": "Complete Product Training"         // Set the task name
+})
+
+task.set("Assignee", entry())                 // Link the task to the employee as the assignee
 ```
 
 
