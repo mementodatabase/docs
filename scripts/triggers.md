@@ -209,17 +209,12 @@ Permissions must be set separately on each device
 ### Default values
 {: .no_toc } 
 ```javascript
-// Set default values when creating a new entry
-
 // Get a reference to the newly created entry (before it's saved)
 var newEntry = defaultEntry();
-
 // Set the "Status" field to "New"
 newEntry.set("Status", "New");
-
 // Set the "CreationDate" field to the current date and time
 newEntry.set("CreationDate", new Date());
-
 ```
 
 ### Data Validation
@@ -238,13 +233,10 @@ if (entry().field("Price") < 0) {
 ### Auto-updating Fields
 {: .no_toc } 
 ```javascript
-// Before saving entry
 // Get the value of the "Price" field from the current entry
 var price = entry().field("Price");
-
 // Calculate 20% tax based on the price
 var tax = price * 0.2;
-
 // Set the calculated tax value into the "Tax" field of the entry
 entry().set("Tax", tax);
 
@@ -259,12 +251,12 @@ entry().set("Tax", tax);
 // The task is titled "Complete Product Training".
 // The employee (current entry) is set as the value of the "Assignee" linked field.
 var projectTasks = libByName("Project Tasks") // Get the "Project Tasks" library
-
-var task = projectTasks.create({              // Create a new task entry
+// Create a new task entry
+var task = projectTasks.create({              
   "Name": "Complete Product Training"         // Set the task name
 })
-
-task.set("Assignee", entry())                 // Link the task to the employee as the assignee
+// Link the task to the employee as the assignee
+task.set("Assignee", entry())                 
 ```
 
 
