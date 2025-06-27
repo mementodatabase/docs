@@ -122,7 +122,7 @@ Sets a custom view for the dialog.
 
 | Parameter | Type | Description |
 |-----------|------|-------------|
-| uiObject | UI Object | A custom UI object to display in the dialog |
+| uiObject | [UI Object]({% link script_api/ui.md %}) | A custom UI object to display in the dialog |
 
 ## positiveButton(text, callback)
 Adds a positive action button to the dialog.
