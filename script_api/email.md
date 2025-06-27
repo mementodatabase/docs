@@ -44,7 +44,7 @@ Sends an email message using the specified SMTP configuration.
 
 | Parameter | Type | Description |
 |-----------|------|-------------|
-| cfg | EmailConfig | SMTP configuration object containing server details |
+| cfg | EmailConfig or defaultEmailConfig() | SMTP configuration object containing server details, or a call to defaultEmailConfig() to use the global email settings from the application |
 | to | String | Recipient email address |
 | subject | String | Email subject line |
 | message | String | Email body content |
@@ -55,6 +55,7 @@ Sends an email message using the specified SMTP configuration.
 
 #### Example
 {: .no_toc } 
+Using explicit configuration:
 ```javascript
 // Create SMTP configuration
 var cfg = {
@@ -69,3 +70,13 @@ var cfg = {
 email().send(cfg, "to@email.com", "Test Subject", "Hello from Memento!");
 log("Email sent successfully");
 ```
+Using default application settings:
+```javascript
+// Use default email configuration defined in the app settings
+var cfg = defaultEmailConfig();
+
+// Send email
+email().send(cfg, "to@email.com", "Test Subject", "Hello using default config!");
+log("Email sent successfully");
+```
+
