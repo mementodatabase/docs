@@ -58,10 +58,10 @@ Library object or null - the library with the specified name if found
 {: .no_toc }
 ```javascript
 // Access a related library and find entries
-let tasksLib = libByName("Tasks");
+let tasksLib = libByName("Project Tasks");
 if (tasksLib) {
-    let pendingTasks = tasksLib.find("Status: Pending");
-    console.log("Pending tasks:", pendingTasks.length);
+    let pendingTasks = tasksLib.find("Pending");
+    message("Pending tasks: " + pendingTasks.length);
 }
 ```
 
@@ -89,8 +89,8 @@ Library object or null - the library with the specified ID if found
 // Access a library using its ID
 let projectsLib = libById("lib_projects_001");
 if (projectsLib) {
-    let activeProjects = projectsLib.find("Status: Active");
-    console.log("Active projects:", activeProjects.length);
+    let activeProjects = projectsLib.find("Active");
+    message("PActive projects: " + activeProjects.length);
 }
 ```
 
@@ -131,7 +131,7 @@ let taskLib = lib();
 let newTask = taskLib.create({
     "Title": "Review Documentation",
     "Priority": "High",
-    "DueDate": new Date(2024, 2, 15).toISOString(),
+    "DueDate": new Date(2024, 2, 15).getTime(),
     "Status": "Not Started"
 });
 ```
@@ -175,7 +175,7 @@ if (latest) {
     let newEntry = lib().create({
         "Category": latest.field("Category"),
         "Department": latest.field("Department"),
-        "CreatedDate": new Date().toISOString()
+        "CreatedDate": new Date().getTime()
     });
 }
 ```
@@ -194,7 +194,7 @@ Entry object or null - the oldest entry or null if library is empty
 ```javascript
 // Archive old entries
 let oldest = lib().firstEntry();
-if (oldest && new Date(oldest.creationTime) < new Date('2023-01-01')) {
+if (oldest && oldest.creationTime.getTime() < new Date('2024-01-01').getTime()) {
     oldest.set("Status", "Archived");
 }
 ```
@@ -216,7 +216,7 @@ Array of strings - field names in definition order
 // Get all field names and log them
 let fieldNames = lib().fields();
 fieldNames.forEach(fieldName => {
-    console.log(`Field name: ${fieldName}`);
+    log(`Field name: ${fieldName}`);
 });
 ```
 
@@ -242,14 +242,10 @@ Array of Entry objects - entries matching the search criteria
 {: .no_toc }
 ```javascript
 // Find all high priority tasks
-let highPriorityTasks = lib().find("Priority: High");
-
-// Find tasks with specific status and category
-let pendingProjects = lib().find("Status: Pending Category: Project");
-
+let highPriorityTasks = lib().find("High");
 // Process found entries
 highPriorityTasks.forEach(task => {
-    console.log(`High priority task: ${task.field("Title")}`);
+    log(`High priority task: ${task.field("Title")}`);
 });
 ```
 
@@ -277,9 +273,9 @@ Entry object or null - the entry with the specified ID if found
 // Find entry by ID and update it
 let entry = lib().findById("entry_123");
 if (entry) {
-    entry.set("LastChecked", new Date().toISOString());
+    entry.set("LastChecked", new Date().getTime());
 } else {
-    console.log("Entry not found");
+    log("Entry not found");
 }
 ```
 
@@ -312,7 +308,7 @@ if (project) {
     
     // Get linked tasks
     let linkedTasks = lib().linksTo(project);
-    console.log(`Found ${linkedTasks.length} tasks linked to this project`);
+    log(`Found ${linkedTasks.length} tasks linked to this project`);
 }
 ```
 
@@ -344,7 +340,7 @@ if (project) {
     
     // Process linked tasks
     linkedTasks.forEach(task => {
-        console.log(`Linked task: ${task.field("Title")}`);
+        log(`Linked task: ${task.field("Title")}`);
         if (task.field("Status") === "Completed") {
             // Update project progress
             project.set("CompletedTasks", project.field("CompletedTasks") + 1);
@@ -379,26 +375,21 @@ lib().show(); // Display the library with the new entry
 // Example of working with related libraries
 let projectsLib = lib(); // Current library
 let tasksLib = libByName("Tasks");
-let resourcesLib = libByName("Resources");
 
 // Create a new project
 let newProject = projectsLib.create({
     "Name": "New Website",
-    "StartDate": new Date().toISOString()
+    "StartDate": new Date().getTime()
 });
 
 // Create associated tasks
 let task1 = tasksLib.create({
     "Title": "Design mockups",
-    "Project": newProject.name,
-    "DueDate": new Date(2024, 2, 15).toISOString()
+    "DueDate": new Date(2024, 2, 15).getTime()
 });
 
-// Find available resources
-let designers = resourcesLib.find("Department: Design Status: Available");
-if (designers.length > 0) {
-    task1.set("AssignedTo", designers[0].name);
-}
+// Link the task to the project using a related field ("Project" should be a relation field)
+task1.set("Project" , newProject)
 ```
 
 ### Complex Search and Update Operations
