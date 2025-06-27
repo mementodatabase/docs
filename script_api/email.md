@@ -55,6 +55,7 @@ Sends an email message using the specified SMTP configuration.
 
 #### Example
 {: .no_toc } 
+
 Using explicit configuration:
 ```javascript
 // Create SMTP configuration
@@ -65,7 +66,6 @@ var cfg = {
     "pass": "password",
     "from": "username@example.com"
 };
-
 // Send email
 email().send(cfg, "to@email.com", "Test Subject", "Hello from Memento!");
 log("Email sent successfully");
@@ -74,7 +74,6 @@ Using default application settings:
 ```javascript
 // Use default email configuration defined in the app settings
 var cfg = defaultEmailConfig();
-
 // Send email
 email().send(cfg, "to@email.com", "Test Subject", "Hello using default config!");
 log("Email sent successfully");
