@@ -106,6 +106,7 @@ Each request consumes AI credits from your account:
 # Examples
 
 ### Simple text request
+{: .no_toc }
 ```javascript
 var response = ai()
     .model("gpt-4o-mini")
@@ -114,6 +115,7 @@ message(response);
 ```
 
 ### Using system message
+{: .no_toc }
 ```javascript
 var response = ai()
     .model("gpt-4.1")
