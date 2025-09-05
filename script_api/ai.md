@@ -123,7 +123,7 @@ message(response);
 ```
 
 ```javascript
-// Using system message
+// Passing images as attachments
 var img = entry().images("Photo");
 var response = ai()
     .ask("Describe this image.", [img]);
