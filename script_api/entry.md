@@ -166,6 +166,27 @@ linkedTasks.forEach(task => {
 });
 ```
 
+## values()
+
+Returns the values of all fields in the entry as a JavaScript object in JSON format. Each field name is used as the key, and its value is mapped accordingly.
+
+#### Returns
+{: .no_toc }
+A JavaScript object (JSON) where:
+* Keys = field names
+* Values = field values
+
+#### Example
+{: .no_toc }
+
+```javascript
+// Get all entry values as JSON
+var e = entry();
+var json = e.values();
+message(JSON.stringify(json, null, 2));
+```
+
+
 ## images(name)
 
 Get images associated with an image field.
