@@ -5,7 +5,7 @@ nav_order: 10
 layout: default
 ---
 
-# HTTP
+# AI
 {: .no_toc } 
 
 ## Table of contents
@@ -19,6 +19,9 @@ Use it to generate text, analyze data, or work with attached images directly wit
 
 {: .note }
 AI requests must be executed asynchronously in the last Phase of an Event
+
+{: .note }
+Each AI request consumes account credits. For simple tasks, use light models like gpt-4o-mini or gpt-4.1-nano. Write scripts efficiently to manage usage costs
 
 # Global functions
 ## ai()
@@ -42,6 +45,7 @@ Sets the AI model to be used for requests.
 | model_name | String | The name of the AI mode |
 
 #### Supported models:
+{: .no_toc } 
 * gpt-4o-mini
 * gpt-4.1
 * gpt-4.1-mini
@@ -96,7 +100,7 @@ A JavaScript object.
 
 # AI credits
 Each request consumes AI credits from your account:
-* 1 credit per 1000 tokens for lightweight models (e.g. gpt-4o-mini)
+* 1 credit per 1000 tokens for lightweight models (e.g. gpt-4o-mini, gpt-4.1-nano)
 * 5 credits per 1000 tokens for premium models (e.g. gpt-4.1, claude-sonnet-4-0)
 
 # Examples
@@ -128,10 +132,29 @@ message(response);
 
 
 ```javascript
+// Getting structured JSON output
 var response = ai()
     .system("Return your answer strictly as JSON.")
     .ask("Give me a shopping list of 3 items.");
 var json = response.asJson();
-message(json[0]); // first item in the list
+message(json); // first item in the list
+```
+
+```javascript
+// Collect context from entries
+var entries = lib().entries();
+var context = "";
+for (var i = 0; i < entries.length; i++) {
+    var e = entries[i];
+    context += "- " + e.field("Notes") + "\n";
+}
+
+// Ask the AI with context included
+var response = ai()
+    .model("gpt-4.1")
+    .system("You are an assistant that answers questions using the provided context.")
+    .ask("Context:\n" + context + "\n\nQuestion: What are the main themes across these notes?");
+
+message(response);
 ```
 
