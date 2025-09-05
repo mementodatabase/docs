@@ -105,16 +105,16 @@ Each request consumes AI credits from your account:
 
 # Examples
 
+### Simple text request
 ```javascript
-// Simple text request
 var response = ai()
     .model("gpt-4o-mini")
     .ask("Write a haiku about databases.");
 message(response);
 ```
 
+### Using system message
 ```javascript
-// Using system message
 var response = ai()
     .model("gpt-4.1")
     .system("You are a professional assistant specialized in finance.")
@@ -122,17 +122,19 @@ var response = ai()
 message(response);
 ```
 
+
+### Passing images as attachments
+{: .no_toc }
 ```javascript
-// Passing images as attachments
 var img = entry().images("Photo");
 var response = ai()
     .ask("Describe this image.", [img]);
 message(response);
 ```
 
-
+### Getting structured JSON output
+{: .no_toc }
 ```javascript
-// Getting structured JSON output
 var response = ai()
     .system("Return your answer strictly as JSON.")
     .ask("Give me a shopping list of 3 items.");
@@ -140,8 +142,9 @@ var json = response.asJson();
 message(json); // first item in the list
 ```
 
+### Collect context from entries
+{: .no_toc }
 ```javascript
-// Collect context from entries
 var entries = lib().entries();
 var context = "";
 for (var i = 0; i < entries.length; i++) {
