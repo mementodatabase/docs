@@ -161,3 +161,13 @@ var response = ai()
 message(response);
 ```
 
+### Passing entry values to AI
+{: .no_toc }
+```javascript
+var data = entry().values();
+var response = ai()
+    .model("gpt-4o-mini")
+    .system("You are a data assistant. Summarize the entry in plain English.")
+    .ask("Here is the entry data:\n" + JSON.stringify(data, null, 2));
+message(response);
+```
