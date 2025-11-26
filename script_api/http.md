@@ -67,6 +67,7 @@ log("Response body: " + result.body);
 
 ## post(url, body)
 Executes an HTTP POST request to the specified URL with the given body content.
+PATCH and PUT requests are also supported through patch(...) and put(...) using the same parameter structure.
 
 #### Parameters
 {: .no_toc } 
@@ -88,6 +89,31 @@ Executes an HTTP POST request to the specified URL with the given body content.
 ```javascript
 var result = http().post("http://httpbin.org/post", "Hello World");
 log("POST response code: " + result.code);
+```
+
+## del(url)
+Executes an HTTP DELETE request to the specified URL.
+
+#### Parameters
+{: .no_toc } 
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| url | String | The complete URL starting with http:// or https:// |
+
+#### Returns
+{: .no_toc } 
+
+| Type | Description |
+|------|-------------|
+| HttpResult | Object containing the response from the HTTP request |
+
+#### Example
+{: .no_toc } 
+```javascript
+// Delete a resource on the server
+var result = http().del("http://httpbin.org/delete");
+log("DELETE response code: " + result.code);
 ```
 
 ## headers(info)
