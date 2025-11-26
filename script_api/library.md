@@ -105,6 +105,8 @@ The Library object provides access to library entries and operations. It can be 
 | `name` | string | The name of the library |
 | `title` | string | The title of the library (alias for name) |
 | `id` | string | The unique identifier of the library (Added in MDB 5.5) |
+| `notes` | string | Library notes (as specified in the library structure) |
+
 
 ## create(values)
 
