@@ -395,3 +395,24 @@ linkedTasks.forEach(task => {
     }
 });
 ```
+
+## duplicate()
+
+Create and return an exact copy of the current entry.
+
+#### Returns
+{: .no_toc }
+The newly created entry that is a copy of the original
+
+#### Example
+{: .no_toc }
+
+```javascript
+// Remove completed tasks from project links
+// Duplicate the last entry in the library
+let original = lib().lastEntry();
+let copy = original.duplicate();
+
+// Modify the duplicate without affecting the original
+copy.set("Title", original.field("Title") + " (Copy)");
+```
