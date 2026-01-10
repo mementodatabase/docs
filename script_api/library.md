@@ -338,7 +338,7 @@ Array of Entry objects - entries that link to the specified entry
 // Find all tasks linked to a specific project
 let project = lib().findByKey("Website Redesign");
 if (project) {
-    let linkedTasks = lib().linksTo(project);
+    let linkedTasks = libByName("Tasks").linksTo(project);
     
     // Process linked tasks
     linkedTasks.forEach(task => {
