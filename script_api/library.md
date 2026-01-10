@@ -309,7 +309,7 @@ if (project) {
     project.set("Status", "In Progress");
     
     // Get linked tasks
-    let linkedTasks = lib().linksTo(project);
+    let linkedTasks = libByName("Tasks").linksTo(project);
     log(`Found ${linkedTasks.length} tasks linked to this project`);
 }
 ```
