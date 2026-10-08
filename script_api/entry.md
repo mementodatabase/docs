@@ -313,6 +313,30 @@ entry.set("Completed", true);
 entry.set("RelatedItems",  [entry1, entry2]);
 ```
 
+#### Setting file fields
+{: .no_toc }
+
+In the Android app, File, Image, Audio and Signature fields accept a [File object]({% link script_api/file.md %}#file-object), including one returned by [Http.download()]({% link script_api/http.md %}#downloadurl-headers). Passing a File object copies its bytes into the library's file storage and stores the copy's URI in the field. The source file stays in place; subsequent changes to it do not affect the stored attachment.
+
+The copy uses the source filename. To choose a name, call [file.rename(newName)]({% link script_api/file.md %}#renamenewname) before `set`. If that name is already taken in the library, a version suffix such as `report_v1.pdf` is added, preserving the extension and existing files.
+
+```javascript
+var result = http().download("https://example.com/report.pdf");
+if (result.code >= 200 && result.code < 300) {
+    entry().set("Document", result.file.rename("report.pdf"));
+}
+```
+
+Arrays may contain File objects and existing URI strings. As with other `set` calls, the supplied value replaces the field's current value.
+
+```javascript
+var attachments = entry().field("Documents");
+attachments.push(file("notes.txt"));
+entry().set("Documents", attachments);
+```
+
+Copying requires file read permission; an optional `rename` also requires file write permission. If a file cannot be copied, the assignment fails and incomplete copies are removed. When copying an array fails, copies already created for that assignment are removed too. Passing ordinary path/URI strings retains the previous behavior and does not trigger this copying step.
+
 ## show()
 
 Display the entry in the user interface.

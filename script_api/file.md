@@ -14,7 +14,7 @@ layout: default
 - TOC
 {:toc}
 
-The File API enables reading and writing files on the device's internal memory or SD card. All file operations are performed through the `File` object, which is obtained using the global `file()` function.
+The File API enables reading and writing files on the device's internal memory or SD card. All file operations are performed through the `File` object, which is obtained using the global `file()` function or the `file` property of a [Http.download()]({% link script_api/http.md %}#downloadurl-headers) result.
 
 {: .note }
 Scripts require read/write file permissions. In the Android app, you must select a folder that your script will have access to through the script permission dialog.
@@ -54,8 +54,40 @@ Represents a file on the device's storage system and provides methods for readin
 
 | Property | Type | Description |
 |----------|------|-------------|
+| name | String | Read-only file name or path used to open the file. For downloaded files, this is the full temporary path. Updated after `rename()`. |
 | exists | Boolean | `true` if the file exists, `false` otherwise |
 | length | Number | Size of the file in bytes. Returns 0 if file doesn't exist |
+
+## rename(newName)
+Physically renames the file within its current directory and updates its `name` property. This method also supports files in the folder selected through the Android script permission dialog.
+
+#### Parameters
+{: .no_toc }
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| newName | String | The new filename, including its extension, such as `report.pdf`. Must not be empty, `.` or `..`, or contain directory separators or a null character. |
+
+#### Returns
+{: .no_toc }
+
+The same File object, allowing method chaining or direct use in [Entry.set(name, value)]({% link script_api/entry.md %}#setname-value).
+
+Renaming requires file write permission. Open text streams are closed and pending writes are saved before the rename. An existing destination file is never overwritten. If renaming fails, an error is thrown and `name` retains its previous value. Renaming to the current name leaves the file unchanged.
+
+For a file returned by [Http.download(url, headers)]({% link script_api/http.md %}#downloadurl-headers), `rename` changes the temporary file itself. A later call to `entry.set` creates a separate copy in the library's file storage.
+
+#### Example
+{: .no_toc }
+
+```javascript
+var result = http().download("https://example.com/report.pdf");
+if (result.code >= 200 && result.code < 300) {
+    var document = result.file.rename("report.pdf");
+    log("Renamed file: " + document.name);
+    entry().set("Document", document);
+}
+```
 
 ## close()
 Closes the file and saves any written content. The file must be closed after writing operations.

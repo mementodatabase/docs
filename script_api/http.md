@@ -65,6 +65,49 @@ log("Response code: " + result.code);
 log("Response body: " + result.body);
 ```
 
+## download(url, headers)
+Downloads a file with an HTTP GET request. The response body is streamed directly to a temporary file without converting its bytes to text or loading the entire file into memory.
+
+#### Parameters
+{: .no_toc }
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| url | String | The complete URL starting with http:// or https:// |
+| headers | Object | Optional header names and string values for this request. May be omitted or `null`. |
+
+Headers configured with `headers(info)` on the same Http object are used as defaults. Headers passed to `download` override those defaults case-insensitively for this request without changing subsequent requests. The timeout configured with `timeout(millis)` also applies to downloads.
+
+#### Returns
+{: .no_toc }
+
+| Type | Description |
+|------|-------------|
+| HttpResult | Response with `code`, response headers, and a [File object]({% link script_api/file.md %}#file-object) in `file`. The `body` property is `null`. |
+
+HTTP error responses, such as 404 or 500, also return their body as a file. Check `code` before using the downloaded file. An empty response body produces an empty file. Network or file I/O errors throw an error and remove the incomplete download.
+
+In the Android app, each download is stored in its own subdirectory of the application's temporary storage. Its initial name is `download.tmp`; the server's filename and extension are not retained. Use [rename(newName)]({% link script_api/file.md %}#renamenewname) to give it a meaningful filename. Separate downloads can be renamed to the same name because they are in different directories.
+
+Downloaded files are temporary. To keep one as an attachment, pass the File object to [Entry.set(name, value)]({% link script_api/entry.md %}#setname-value), which copies it into the library's file storage. Calling `file.close()` does not delete the temporary file.
+
+{: .note }
+Downloading requires the "Network" permission. Reading the File object or copying it into a library requires file read permission; renaming it requires file write permission.
+
+#### Example
+{: .no_toc }
+
+```javascript
+var result = http().download("https://example.com/report.pdf", {
+    "Authorization": "Bearer " + token
+});
+if (result.code >= 200 && result.code < 300) {
+    entry().set("Document", result.file.rename("report.pdf"));
+} else {
+    log("Download failed with HTTP status: " + result.code);
+}
+```
+
 ## post(url, body)
 Executes an HTTP POST request to the specified URL with the given body content.
 PATCH and PUT requests are also supported through patch(...) and put(...) using the same parameter structure.
@@ -150,7 +193,8 @@ The HttpResult object contains the response from an HTTP request.
 
 | Property | Type | Description |
 |----------|------|-------------|
-| body | String | The response body as text |
+| body | String or null | The response body as text; `null` for `download()` |
+| file | File or null | The downloaded [File object]({% link script_api/file.md %}#file-object) for `download()`; `null` for other HTTP methods |
 | code | Number | The HTTP status code of the response (e.g., 200 for success) |
 
 ## header(tag)
