@@ -138,25 +138,95 @@ let newTask = taskLib.create({
 });
 ```
 
-## entries()
+## entries(options)
 
-Get all entries in the library.
+Get the entries of the library: all of them, or those that match a filter, sorted, a page at a time.
 {: .fs-5 }
+
+Without options, returns every entry, newest first, loading the whole library. With options, only the matching entries are read and loaded: on a large library this is much faster than loading every entry and checking it in JavaScript. The filter is described in [Filters](#filters).
+
+#### Parameters
+{: .no_toc }
+
+| Parameter | Type | Description |
+|:----------|:-----|:------------|
+| `options` | object | Optional. `where` - a filter; `sort` - an array of `{field, desc}`, the first deciding first; `limit` - the most entries to return; `offset` - how many matching entries to skip |
+
+`sort` takes `creationTime`, `lastModifiedTime` and the fields Memento can sort a list by; `desc: true` sorts from the largest. Entries that compare equal stay newest first. Any other option is an error.
 
 #### Returns
 {: .no_toc }
-Array of Entry objects - all entries sorted by creation time (newest first)
+Array of Entry objects - newest first unless `sort` says otherwise
 
 #### Example
 {: .no_toc }
 ```javascript
-// Get all entries and process them
+// Every entry
 let allEntries = lib().entries();
-allEntries.forEach(entry => {
-    if (entry.field("Status") === "Overdue") {
-        entry.set("Priority", "High");
-    }
+
+// Open tasks due before today, the earliest first, at most 50
+let overdue = lib().entries({
+    where: { Status: "Open", "Due date": { $lt: new Date() } },
+    sort: [{ field: "Due date" }],
+    limit: 50
 });
+overdue.forEach(task => task.set("Priority", "High"));
+
+// The second page of 20, the most expensive first
+let page = lib().entries({ sort: [{ field: "Amount", desc: true }], limit: 20, offset: 20 });
+```
+
+## count(where)
+
+Count the entries that match a filter.
+{: .fs-5 }
+
+Counts without loading entries. Without `where`, counts every entry of the library.
+
+#### Parameters
+{: .no_toc }
+
+| Parameter | Type | Description |
+|:----------|:-----|:------------|
+| `where` | object | Optional. A filter, as described in [Filters](#filters) |
+
+#### Returns
+{: .no_toc }
+number - how many entries match
+
+#### Example
+{: .no_toc }
+```javascript
+let open = lib().count({ Status: "Open" });
+let all = lib().count();
+message(open + " of " + all + " tasks are open");
+```
+
+## sum(field, where)
+
+Sum a number field over the entries that match a filter.
+{: .fs-5 }
+
+Sums without loading entries. Entries where the field is empty are skipped; the sum is 0 when no entry matches. Without `where`, sums over every entry.
+
+#### Parameters
+{: .no_toc }
+
+| Parameter | Type | Description |
+|:----------|:-----|:------------|
+| `field` | string | The name of a number field: Integer, Real number, Currency, Rating, Duration or Integer values |
+| `where` | object | Optional. A filter, as described in [Filters](#filters) |
+
+#### Returns
+{: .no_toc }
+number - the sum, in the values `entry.field()` reads
+
+#### Example
+{: .no_toc }
+```javascript
+// Expenses of October 2026
+let spent = libByName("Expenses").sum("Amount", { Date: { $gte: "2026-10-01", $lt: "2026-11-01" } });
+message("Spent in October: " + spent);
 ```
 
 ## lastEntry()
@@ -227,7 +297,7 @@ fieldNames.forEach(fieldName => {
 Search for entries matching the given query.
 {: .fs-5 }
 
-Performs a search similar to the Memento user interface search. Returns entries sorted by creation time, from newest to oldest.
+Performs a search similar to the Memento user interface search. Returns entries sorted by creation time, from newest to oldest. To select entries by the values of their fields, use `entries({ where: ... })`; passing an object to `find()` is an error.
 
 #### Parameters
 {: .no_toc }
@@ -369,6 +439,93 @@ let newEntry = lib().create({
 lib().show(); // Display the library with the new entry
 ```
 
+# Filters
+
+`entries()`, `count()` and `sum()` take a filter: an object whose keys are field names and whose values say what each field must hold. It is written like a MongoDB query.
+
+```javascript
+{
+    Status: "Open",                                         // equals
+    Amount: { $gte: 10, $lt: 100 },                         // every operator holds
+    $or: [{ Priority: "High" }, { "Due date": { $lt: "2026-10-20" } }],
+    Labels: { $all: ["home", "urgent"] },                   // a multiple-choice field has both
+    Notes: null,                                            // empty
+    Title: { $not: { $contains: "draft" } }
+}
+```
+
+- Every key must hold; `{}` matches every entry.
+- Field names ignore case, as in `entry.field()`. `creationTime` and `lastModifiedTime` are the entry's creation and last modification times, unless the library has fields with these names.
+- A field's value is either the value to equal or an object of operators, not both.
+- `$and` and `$or` take a non-empty array of filters. `$not` negates the operators of one field.
+- Entries in the trash are never included.
+- In a script widget whose settings set a filter, `entries()`, `count()` and `sum()` see only the entries that pass it.
+
+## Operators
+
+| Operator | Operand | Matches when the field |
+|:---------|:--------|:-----------------------|
+| value, `$eq` | value | equals it |
+| `$ne` | value | does not equal it; an empty field matches |
+| `$gt`, `$gte`, `$lt`, `$lte` | value | is greater, greater or equal, less, less or equal; an empty field never matches |
+| `$in` | array | equals one of them; `null` among them matches an empty field |
+| `$nin` | array | equals none of them; an empty field matches unless `null` is among them |
+| `$exists` | boolean | `true`: is not empty; `false`: is empty |
+| `$contains` | text | contains it, ignoring case |
+| `$startsWith` | text | starts with it, ignoring case |
+| `$all` | array | a multiple-choice field has every item |
+| `$not` | operators | does not satisfy them |
+
+`$in: []` and `$all: []` match nothing, `$nin: []` matches everything.
+
+## Field types
+
+| Field type | Operand | Operators |
+|:-----------|:--------|:----------|
+| Integer, Real number, Currency, Rating, Duration, Integer values | number, as `entry.field()` reads it | value, `$eq $ne $gt $gte $lt $lte $in $nin $exists $not` |
+| Boolean (Checkbox) | `true` or `false` | value, `$eq $ne` |
+| Date, Date/Time; `creationTime`, `lastModifiedTime` | a date, see [Dates](#dates) | as numbers |
+| Single-choice list, Radio Buttons | item title | value, `$eq $ne $in $nin $exists $not` |
+| Multiple-choice list, Checkboxes | item title | item, `$eq $ne $in $nin $all $exists $not` |
+| Text, Hyperlink, Phone, Email | text | value, `$eq $ne $in $nin $contains $startsWith $exists $not` |
+
+Fields of other types cannot be filtered by.
+
+- **Numbers.** A number in quotes, `"10"`, is text, and an error on a number field.
+- **Checkbox.** An unchecked box and a box never set are both `false`.
+- **Choices** match item titles ignoring case, items inside folders included. On a multiple-choice field a value or `$eq` means "has this item", `$ne` "has not", `$in` "has any", `$nin` "has none", `$all` "has every"; an array as the value is an error.
+- **Text** compares ignoring case, `$eq` included; `""` means empty. An encrypted field can be filtered by while its library is unlocked.
+- **Empty.** `null` or `{ $exists: false }` matches an empty field, `{ $exists: true }` a filled one.
+
+## Dates
+
+A date operand is one of:
+
+- a `Date` object, or milliseconds since 1970;
+- `"2026-10-17"` - a whole day;
+- `"2026-10-17T09:30"` or `"2026-10-17T09:30:15"` - a minute or a second, in the device's time zone;
+- an instant with a zone, as `new Date().toISOString()` or JSON gives it: `"2026-10-17T09:30:00.000Z"`, `"2026-10-17T11:30:00+02:00"`.
+
+An operand stands for the whole period it names: `{ $eq: "2026-10-17" }` matches any time of that day, `{ $lt: "2026-10-17" }` before it, `{ $lte: "2026-10-17" }` up to its end, `{ $gt: "2026-10-17" }` after it. A Date field compares by whole days of the device's time zone, so `{ $lt: new Date() }` on it means before today. The `lastModifiedTime` of an entry never edited is its creation time.
+
+```javascript
+// Entries created this month
+let now = new Date();
+let created = lib().count({ creationTime: { $gte: new Date(now.getFullYear(), now.getMonth(), 1) } });
+```
+
+## Errors
+
+A filter that cannot be read stops the script with an error named `Filter Error`. Its message says what is wrong and what to write instead: an unknown field lists the library's fields, an unknown choice lists the items, an operator the field does not take lists those it does. `undefined` anywhere in a filter is an error, usually a variable that was not set; for an empty value write `null`. Regular expressions are not supported: use `$contains` or `$startsWith`.
+
+```javascript
+try {
+    lib().count({ Staus: "Open" });
+} catch (e) {
+    log(e.name + ": " + e.message); // Filter Error: unknown field "Staus"; the library's fields: ...
+}
+```
+
 # Examples
 
 ### Working with Multiple Libraries
@@ -397,25 +554,20 @@ task1.set("Project" , newProject)
 ### Search and Update Operations
 {: .no_toc }
 ```javascript
-// Find and update multiple entries based on complex criteria
-// Get today's date
-let today = new Date();
+// Mark the tasks in progress that are past their due date as overdue
+let late = lib().entries({ where: { Status: "In Progress", DueDate: { $lt: new Date() } } });
+late.forEach(task => task.set("Status", "Overdue"));
+```
 
-// Get all tasks
-let allTasks = lib().entries();
-let resourcesLib = libByName("Resources");
-
-// Iterate and filter only "In Progress" tasks
-allTasks.forEach(task => {
-    if (task.field("Status") === "In Progress") {
-        let dueDate = task.field("DueDate");
-        
-        // Check if task is overdue
-        if (dueDate.getTime() < today.getTime()) {
-            // Mark task as overdue
-            task.set("Status", "Overdue");
-        }
-    }
+### Counts and Totals
+{: .no_toc }
+```javascript
+// Tasks per status and the hours still planned, without loading the tasks
+let report = "";
+["Open", "In Progress", "Done"].forEach(status => {
+    let count = lib().count({ Status: status });
+    report += status + ": " + count + "\n";
 });
-
+let hours = lib().sum("Hours", { Status: { $ne: "Done" } });
+message(report + "Hours left: " + hours);
 ```

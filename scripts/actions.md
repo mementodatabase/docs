@@ -101,7 +101,7 @@ for (let entry of entries) {
 {: .no_toc } 
 ```javascript
 // Count total entries in library
-let total = lib().entries().length;
+let total = lib().count();
 message("Total entries: " + total);
 ```
 

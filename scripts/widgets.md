@@ -79,8 +79,8 @@ By using the `_initWidget` variable in your script, you can ensure that your scr
 {: .no_toc } 
 ```javascript
 var library = lib();
-// get the number of entries in the library
-var entryCount = library.entries().length;
+// count the entries without loading them
+var entryCount = library.count();
 // return the entry count as a string
 "Total Entries: " + entryCount;
 ```
@@ -88,9 +88,9 @@ var entryCount = library.entries().length;
 ### Display Recent Entries
 {: .no_toc } 
 ```javascript
-var entries = lib().entries();
+var entries = lib().entries({ limit: 5 });
 var result = '';
-for (var i = 0; i < Math.min(entries.length, 5); i++) {
+for (var i = 0; i < entries.length; i++) {
     var entry = entries[i];
     result += entry.title + '<br>';
 }
@@ -123,15 +123,15 @@ result;
 function escape(text) {
     return String(text).replace(/&/g, '&amp;').replace(/</g, '&lt;');
 }
-var entries = lib().entries();
+var entries = lib().entries({ limit: 5 });
 var html = '<h3>Recent entries</h3><ul>';
-for (var i = 0; i < Math.min(entries.length, 5); i++) {
+for (var i = 0; i < entries.length; i++) {
     var entry = entries[i];
     html += '<li><b>' + escape(entry.title) + '</b>';
     if (entry.description) html += ' <font color="#808080">' + escape(entry.description) + '</font>';
     html += '</li>';
 }
-html += '</ul><small>Total: ' + entries.length + '</small>';
+html += '</ul><small>Total: ' + lib().count() + '</small>';
 html;
 ```
 
