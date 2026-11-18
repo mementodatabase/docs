@@ -473,7 +473,7 @@ lib().show(); // Display the library with the new entry
 | `$exists` | boolean | `true`: is not empty; `false`: is empty |
 | `$contains` | text | contains it, ignoring case |
 | `$startsWith` | text | starts with it, ignoring case |
-| `$all` | array | a multiple-choice field has every item |
+| `$all` | array | a multiple-choice, tags or link field has every one of them |
 | `$not` | operators | does not satisfy them |
 
 `$in: []` and `$all: []` match nothing, `$nin: []` matches everything.
@@ -487,7 +487,9 @@ lib().show(); // Display the library with the new entry
 | Date, Date/Time; `creationTime`, `lastModifiedTime` | a date, see [Dates](#dates) | as numbers |
 | Single-choice list, Radio Buttons | item title | value, `$eq $ne $in $nin $exists $not` |
 | Multiple-choice list, Checkboxes | item title | item, `$eq $ne $in $nin $all $exists $not` |
-| Text, Hyperlink, Phone, Email | text | value, `$eq $ne $in $nin $contains $startsWith $exists $not` |
+| Text, Hyperlink, Phone, Email, Barcode | text | value, `$eq $ne $in $nin $contains $startsWith $exists $not` |
+| Tags | tag | tag, `$eq $ne $in $nin $all $exists $not` |
+| Link to entry | an entry or its `id` | entry, `$eq $ne $in $nin $all $exists $not` |
 
 Fields of other types cannot be filtered by.
 
@@ -495,6 +497,13 @@ Fields of other types cannot be filtered by.
 - **Checkbox.** An unchecked box and a box never set are both `false`.
 - **Choices** match item titles ignoring case, items inside folders included. On a multiple-choice field a value or `$eq` means "has this item", `$ne` "has not", `$in` "has any", `$nin` "has none", `$all` "has every"; an array as the value is an error.
 - **Text** compares ignoring case, `$eq` included; `""` means empty. An encrypted field can be filtered by while its library is unlocked.
+- **Tags** compare whole tags ignoring case, as a multiple-choice field compares items: `{ Tags: "work" }` has the tag `work` and not `homework`. A tag holds no spaces; `""` means no tags.
+- **Links to entries** compare the linked entries, as a multiple-choice field compares items: an operand is an entry, as `entries()` or `entry.field()` gives it, or its `id`. To filter by a linked entry's fields, find those entries first:
+
+```javascript
+let active = libByName("Projects").entries({ where: { Status: "Active" } });
+let tasks = lib().entries({ where: { Project: { $in: active } } });
+```
 - **Empty.** `null` or `{ $exists: false }` matches an empty field, `{ $exists: true }` a filled one.
 
 ## Dates
