@@ -17,14 +17,15 @@ layout: default
 The AI API provides functions for sending requests to Large Language Models (LLMs) from your scripts.
 Use it to generate text, analyze data, or work with attached images directly within Memento Database.
 
-Requests go to the AI source chosen in the AI assistant settings: **Memento Cloud** or your own API key
-(**OpenAI API** or another OpenAI-compatible provider).
+Requests go to the AI source chosen in the AI assistant settings, **Memento Cloud** or your own API key
+(**OpenAI API** or another OpenAI-compatible provider), and use the AI assistant's models.
 
 {: .note }
 AI requests must be executed asynchronously in the last Phase of an Event
 
 {: .note }
-With Memento Cloud each AI request consumes account credits. For simple tasks, use light models like gpt-6-luna or gpt-5.4-nano. Write scripts efficiently to manage usage costs
+With Memento Cloud each AI request spends AI credits, the same balance the AI assistant uses. The device limits how many
+requests scripts make (see [Limits](#limits)). Write scripts efficiently to manage usage costs
 
 # Global functions
 ## ai()
@@ -38,8 +39,8 @@ A new AI object instance for making AI requests
 The AI object provides methods for making AI requests within your app scripts. Access it using the global ai() function.
 
 ## model(model_name)
-Sets the AI model to be used for requests. Without it, the default model is used:
-gpt-6-luna with Memento Cloud, or the default model chosen in the settings with your own API key.
+Sets the AI model to be used for requests. Without it, the default model for scripts is used: the one chosen in
+Settings → AI Assistant → AI Models → Model for scripts, or else the default model of the AI assistant's chats.
 
 A model that is not available with the current AI source is replaced by the default model,
 and a warning is written to the script log.
@@ -51,26 +52,11 @@ and a warning is written to the script log.
 |-----------|------|-------------|
 | model_name | String | The name of the AI model |
 
-#### Memento Cloud models
+#### Models
 {: .no_toc } 
-
-| Model | Plan | Credits per 1000 tokens |
-|-------|------|-------------------------|
-| gpt-6-luna | any | 1 |
-| gpt-5.4-mini | any | 1 |
-| gpt-5.4-nano | any | 1 |
-| gpt-4.1-mini | any | 2 |
-| gpt-4.1-nano | any | 1 |
-| gpt-5.6-terra | PRO or TEAM | 5 |
-| gpt-5.4 | PRO or TEAM | 5 |
-| gpt-4.1 | PRO or TEAM | 5 |
-| claude-sonnet-5 | PRO or TEAM | 6 |
-| claude-sonnet-4-6 | PRO or TEAM | 6 |
-| claude-haiku-4-5 | PRO or TEAM | 3 |
-
-#### Your own API key
-{: .no_toc } 
-The models added in the AI assistant settings. Requests are paid to the provider, not with Memento credits.
+The models of the AI assistant. With Memento Cloud, the models listed in Settings → AI Assistant → AI Models, with
+their prices in credits, except those turned off there. With your own API key, the models added there. The model list
+of the Ask AI automation action shows the names to pass here.
 
 #### Returns
 {: .no_toc } 
@@ -99,7 +85,7 @@ Sends a message to the AI model.
 | Parameter | Type | Description |
 |-----------|------|-------------|
 | message | String | string, the user message |
-| attachments (optional) | String or Array | one or more image file paths |
+| attachments (optional) | String or Array | up to 5 images: image fields' values, file paths or URLs. The model must accept images. |
 
 #### Returns
 {: .no_toc } 
@@ -119,9 +105,26 @@ A JavaScript object or array, or null if the response contains no JSON.
 
 
 # AI credits
-With Memento Cloud each request consumes AI credits from your account: the tokens of the request and the answer,
-multiplied by the model's rate in the table above (1 credit per 1000 tokens for light models).
-With your own API key no credits are used.
+With Memento Cloud each request spends AI credits from your account, the same balance the AI assistant uses: the tokens
+of the request and of the answer at the model's price, shown in the AI Models settings as credits per million input and
+output tokens. Your balance is on the Memento account screen. With your own API key the provider is paid, and no credits
+are used.
+
+# Limits
+The device limits AI requests of scripts, so that a mistake such as `ai()` in a loop over a thousand entries does not
+spend all your credits. The limits are set in Settings → AI Assistant → AI limits for scripts and hold for all scripts,
+triggers and the Ask AI automation action on the device together. 0 means no limit.
+
+| Limit | Default | |
+|-------|---------|-|
+| AI credits per day | 500 | Memento Cloud only |
+| Calls per script run | 20 | |
+| Calls per day | 500 | all scripts and triggers |
+
+A request over a limit fails with an error that names the limit; in a run past its limit every later request fails too,
+even if the script catches the error. Days are counted by the device's local time. Each request counts its credits
+rounded up to a whole number and writes the model, its tokens and credits to the script log; the AI limits for scripts
+screen shows what scripts have spent today.
 
 # Examples
 
@@ -137,7 +140,7 @@ message(response);
 {: .no_toc }
 ```javascript
 var response = ai()
-    .model("gpt-5.4")
+    .model("gpt-6-sol")
     .system("You are a professional assistant specialized in finance.")
     .ask("Explain compound interest in simple terms.");
 message(response);
@@ -175,7 +178,6 @@ for (var i = 0; i < entries.length; i++) {
 
 // Ask the AI with context included
 var response = ai()
-    .model("gpt-5.4")
     .system("You are an assistant that answers questions using the provided context.")
     .ask("Context:\n" + context + "\n\nQuestion: What are the main themes across these notes?");
 
@@ -187,7 +189,6 @@ message(response);
 ```javascript
 var data = entry().values();
 var response = ai()
-    .model("gpt-5.4-nano")
     .system("You are a data assistant. Summarize the entry in plain English.")
     .ask("Here is the entry data:\n" + JSON.stringify(data, null, 2));
 message(response);
